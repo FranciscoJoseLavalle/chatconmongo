@@ -1,0 +1,38 @@
+<div>
+    <div class="productsFormContainer">
+        <form id="testForm">
+            <h2>Agregar un producto</h2>
+            <div>
+                <label>Nombre</label>
+                <input type="text" name="name">
+            </div>
+            <div>
+                <label>Precio</label>
+                <input type="number" name="price">
+            </div>
+            <div>
+                <label>Foto URL</label>
+                <input type="url" name="thumbnail" required>
+            </div>
+
+            <button>Agregar</button>
+        </form>
+
+        <div class="productsContainer">
+
+        </div>
+    </div>
+
+    <div class="chatContainer">
+        <div class="chatTitle">
+            <h1>Coder Chat</h1>
+            <p class="userNameText">Tu nombre de usuario: </p>
+        </div>
+        <span id="log"></span>
+        <input type="text" id="chatBox">
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/products.js"></script>
