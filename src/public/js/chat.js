@@ -1,35 +1,42 @@
 let user = '';
+let email = '';
 const chatBox = document.querySelector('#chatBox');
 const userNameText = document.querySelector('.userNameText');
 
 const socket = io({
     autoConnect: false
 });
-document.addEventListener('DOMContentLoaded',() => {
+document.addEventListener('DOMContentLoaded', () => {
 
     user = sessionStorage.getItem('user') || '';
+    email = sessionStorage.getItem('email') || '';
 
     if (user == '') {
         Swal.fire({
-            title: "Introduce tu usuario",
-            input: "text",
-            text: "Ingresa el usuario con el que te identificarás en el chat",
+            title: "Introduce tus datos",
+            html:
+            '<input id="swal-input1" class="swal2-input" placeholder="Nombre de usuario">' +
+            '<input id="swal-input2" class="swal2-input" placeholder="Email">'
+            ,
             inputValidator: (value) => {
                 return !value && "Necesitas identificarte para poder continuar"
             },
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(result => {
-            user = result.value;
+            user = document.querySelector('#swal-input1').value;
+            email = document.querySelector('#swal-input2').value;
             sessionStorage.setItem('user', user);
-            userNameText.textContent = `Tu nombre de usuario: ${user}`
+            sessionStorage.setItem('email', email);
             socket.connect();
             socket.emit('userConnected');
+            userNameText.textContent = `Tu nombre de usuario: ${user}`;
         })
     } else {
-        userNameText.textContent = `Tu nombre de usuario: ${user}`;
         socket.connect();
         socket.emit('userConnected');
+        userNameText.textContent = `Tu nombre de usuario: ${user}`;
+
     }
 })
 
@@ -43,9 +50,9 @@ chatBox.addEventListener('keyup', evt => {
             let hour = dateNow.getHours();
             let minute = dateNow.getMinutes();
             let second = dateNow.getSeconds();
-            
+
             let textDate = `${day}/${month + 1}/${year} a las ${hour}:${minute}:${second}`;
-            socket.emit('message', { user, message: chatBox.value, date: textDate })
+            socket.emit('message', { user: {id: email, name: user, last_name: "Lavalle", age: 20, alias: "Franacho", avatar: "imagenPerfil.com"}, message: chatBox.value, date: textDate })
             chatBox.value = "";
         }
     }
@@ -63,11 +70,11 @@ socket.on('log', data => {
         const textContainer = document.createElement('div');
         const div = document.createElement('div');
 
-        if (message.user == user) {
+        if (message.user.name == user) {
             div.classList.add('contUsuario')
         }
 
-        userText.textContent = `${message.user}`;
+        userText.textContent = `${message.user.name}`;
         userMessage.textContent = `${message.message}`;
         dateText.textContent = `${message.date}`
 
@@ -82,9 +89,9 @@ socket.on('log', data => {
 socket.on('newUser', data => {
     if (user) {
         Swal.fire({
-            text:"Nuevo usuario en el chat",
-            toast:true,
-            position:"top-right",
+            text: "Nuevo usuario en el chat",
+            toast: true,
+            position: "top-right",
             timer: 5000
         })
     }

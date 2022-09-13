@@ -3,7 +3,7 @@ import MongoDBContainer from "./MongoDBContainer.js";
 
 const collection = 'messages';
 const userSchema = mongoose.Schema({
-    user: String,
+    user: Object,
     message: String,
     date: String
 })

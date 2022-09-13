@@ -79,5 +79,5 @@ app.get('/normalizr', async (req, res) => {
 
     console.log(JSON.stringify(normalizedData, null, '\t'));
     console.log(JSON.stringify(chatArray, null).length);
-    res.send(chatArray);
+    res.send(normalizedData);
 })
